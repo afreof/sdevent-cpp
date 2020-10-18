@@ -95,3 +95,16 @@ if(BUILD_TESTS)
     enable_testing()
     add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/tests")
 endif()
+
+#----------------------------------
+# DOCUMENTATION
+#----------------------------------
+
+option(BUILD_DOC "Build documentation for sdevent-cpp" ON)
+
+if(BUILD_DOC)
+    message(STATUS "Building with documentation")
+    option(BUILD_DOXYGEN_DOC "Build doxygen documentation for sdevent-cpp API" ON)
+    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/docs")
+    install(FILES README README.md NEWS COPYING ChangeLog AUTHORS DESTINATION ${CMAKE_INSTALL_DOCDIR})
+endif()
