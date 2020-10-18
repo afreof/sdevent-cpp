@@ -7,7 +7,7 @@ using namespace std;
 namespace sdevent
 {
 
-SdEvent::SdEvent(bool watchdog, bool default_sigs) : m_event(NULL)
+SdEvent::SdEvent(bool watchdog, bool default_sigs) : m_event(nullptr)
 {
     int r;
 
@@ -26,20 +26,20 @@ SdEvent::SdEvent(bool watchdog, bool default_sigs) : m_event(NULL)
         }
 
         /* Block SIGTERM first, so that the event loop can handle it */
-        if (sigprocmask(SIG_BLOCK, &ss, NULL) < 0)
+        if (sigprocmask(SIG_BLOCK, &ss, nullptr) < 0)
         {
             throw system_error(errno, generic_category());
         }
 
         /* Let's make use of the default handler and "floating" reference
          * features of sd_event_add_signal() */
-        r = sd_event_add_signal(m_event, NULL, SIGTERM, NULL, NULL);
+        r = sd_event_add_signal(m_event, nullptr, SIGTERM, nullptr, nullptr);
         if (r < 0)
         {
             throw system_error(-r, generic_category());
         }
 
-        r = sd_event_add_signal(m_event, NULL, SIGINT, NULL, NULL);
+        r = sd_event_add_signal(m_event, nullptr, SIGINT, nullptr, nullptr);
         if (r < 0)
         {
             throw system_error(-r, generic_category());
@@ -79,6 +79,25 @@ void SdEvent::loop()
     {
         throw system_error(-r, generic_category());
     }
+}
+
+std::unique_ptr<Defer> SdEvent::addDeferOff(Defer::HandlerFunc handler, void* userdata)
+{
+    return move(make_unique<Defer>(m_event, handler, userdata));
+}
+
+std::unique_ptr<Defer> SdEvent::addDeferOn(Defer::HandlerFunc handler, void* userdata)
+{
+    auto defer = make_unique<Defer>(m_event, handler, userdata);
+    defer->setEnabled(SD_EVENT_ON);
+    return defer;
+}
+
+std::unique_ptr<Defer> SdEvent::addDeferOneShot(Defer::HandlerFunc handler, void* userdata)
+{
+    auto defer = make_unique<Defer>(m_event, handler, userdata);
+    defer->setEnabled(SD_EVENT_ONESHOT);
+    return defer;
 }
 
 }  // namespace sdevent

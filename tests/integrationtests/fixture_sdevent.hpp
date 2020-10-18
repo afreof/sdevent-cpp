@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 #include <memory>
+#include <chrono>
 
 #include "sdevent-cpp/sdevent.hpp"
 
@@ -36,6 +37,7 @@ class FixtureSdEvent : public ::testing::Test
 
    public:
     std::unique_ptr<sdevent::SdEvent> m_sdevent;
+    void runSdEvent(int n=1, std::chrono::milliseconds timeout = std::chrono::milliseconds(10));
 };
 
 }  // namespace test
