@@ -108,3 +108,34 @@ if(BUILD_DOC)
     add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/docs")
     install(FILES README README.md NEWS COPYING ChangeLog AUTHORS DESTINATION ${CMAKE_INSTALL_DOCDIR})
 endif()
+
+#----------------------------------
+# CMAKE CONFIG & PACKAGE CONFIG
+#----------------------------------
+
+include(CMakePackageConfigHelpers)
+
+install(EXPORT sdevent-cpp-targets
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sdevent-cpp
+    NAMESPACE SDEventCpp::
+    COMPONENT dev
+)
+
+configure_package_config_file(
+    cmake/sdevent-cpp-config.cmake.in cmake/sdevent-cpp-config.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sdevent-cpp
+)
+
+write_basic_package_version_file(cmake/sdevent-cpp-config-version.cmake COMPATIBILITY SameMajorVersion)
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/cmake/sdevent-cpp-config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/cmake/sdevent-cpp-config-version.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/sdevent-cpp
+    COMPONENT dev
+)
+
+configure_file(pkgconfig/sdevent-cpp.pc.in pkgconfig/sdevent-cpp.pc @ONLY)
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/pkgconfig/sdevent-cpp.pc
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig COMPONENT dev
+)

@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=@CMAKE_INSTALL_PREFIX@
+libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+Name: @PROJECT_NAME@
+Description: C++ library on top of sd-event, a systemd main loop library
+Requires: libsystemd
+Version: @SDEVENTCPP_VERSION@
+Libs: -L${libdir} -l@PROJECT_NAME@
+Cflags: -I${includedir}
