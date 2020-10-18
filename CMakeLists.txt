@@ -83,3 +83,15 @@ install(TARGETS sdevent-cpp
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT static_libraries
         PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${SDEVENTCPP_INCLUDE_SUBDIR} COMPONENT dev
 )
+
+#----------------------------------
+# TESTS
+#----------------------------------
+
+option(BUILD_TESTS "Build and install tests (default OFF)" OFF)
+
+if(BUILD_TESTS)
+    message(STATUS "Building with tests")
+    enable_testing()
+    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/tests")
+endif()
